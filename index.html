@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fraud Detection</title>
+<style>
+body { font-family: Arial; background:#0f172a; color:white; text-align:center; }
+input, select { padding:10px; margin:6px; width:220px; border-radius:8px; border:none; }
+button { padding:10px 20px; background:#ef4444; color:white; border:none; border-radius:8px; }
+.card { margin-top:20px; background:#1e293b; padding:20px; border-radius:12px; display:inline-block; }
+</style>
+</head>
+<body>
+
+<h2>🚨 Fraud Detection System</h2>
+
+<form action="/predict" method="post">
+<input name="amount" placeholder="Transaction Amount" required>
+<input name="hour" placeholder="Transaction Hour (0-23)" required>
+<input name="location_risk" placeholder="Location Risk (0-1)" required>
+<input name="device" placeholder="Device (0=Safe,1=Risky)" required>
+<input name="txn24h" placeholder="Transactions in 24h" required>
+
+<select name="type">
+<option>TRANSFER</option>
+<option>CASH_OUT</option>
+<option>PAYMENT</option>
+</select><br>
+
+<button type="submit">Check Fraud</button>
+</form>
+
+{% if prediction_text %}
+<div class="card">
+<h3>{{ prediction_text }}</h3>
+
+<h4>🔍 Key Risk Drivers:</h4>
+<ul style="text-align:left;">
+{% for item in shap_results %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+</div>
+{% endif %}
+
+</body>
+</html>
